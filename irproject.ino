@@ -107,6 +107,7 @@ void signalReceived(unsigned long value){
     if(remaining_time < 0){
       remaining_time += 100;
     }
+  
     updateTimer();
     break;
   case REMOTE_RIGHT_BUTTON:
@@ -148,23 +149,28 @@ void deleteTimer(){
 }
 void updateTimer(){
   deleteTimer();
+  remainingTimeCheck();
   timer_id = timer.setInterval(TIME_GAP,countdown);
 }
 
 void timeExpired(){
   //do something
   //Serial.println("time expired");
-  digitalWrite(RELAY_PIN, HIGH);
+  digitalWrite(RELAY_PIN, LOW);
 }
 
 void timeAvailable(){
   //do something
   //Serial.println("time available");
-  digitalWrite(RELAY_PIN, LOW);
+  digitalWrite(RELAY_PIN, HIGH);
 }
 
 void countdown(){
   remaining_time --;
+  remainingTimeCheck();
+}
+
+void remainingTimeCheck(){
   if(remaining_time <= 0){
     remaining_time = 0;
     timer.deleteTimer(timer_id);
